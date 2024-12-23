@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: CupinTexture
+  m_EditorClassIdentifier: 
+  m_GroupName: CupinTexture
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 40961c51dc3d5492293338ae4301902b
+  m_SerializeEntries:
+  - m_GUID: 0e072017b01110849878963ed49746fe
+    m_Address: White_Cupin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cedfdb1cd60e2344aa6e9e20c368499
+    m_Address: Melon_Cupin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60ee27754426b6c46ab276a3e2adb498
+    m_Address: Hachi_Cupin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 801f716fb969e7244bfb74047aa7dff6
+    m_Address: Brown_Cupin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a838a9379078c43948f0b1831a1c3c14, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ca69ad58235a641fd90f7e478a3c45ff, type: 2}
+    - {fileID: 11400000, guid: f509a4216ecd14052a58da62e9af8e03, type: 2}
