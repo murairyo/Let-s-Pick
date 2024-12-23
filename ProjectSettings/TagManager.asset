@@ -11,6 +11,7 @@ TagManager:
   - LocoText
   - Bot_Collider
   - Character
+  - Cup
   layers:
   - Default
   - TransparentFX
