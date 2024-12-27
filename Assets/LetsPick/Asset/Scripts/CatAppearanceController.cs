@@ -1,47 +1,51 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 
 public class CatAppearanceController : MonoBehaviour
 {
     [Header("Textures for Each State")]
-    [SerializeField] private Texture waitingTexture;   // ‘Ò‹@’†‚ÌƒeƒNƒXƒ`ƒƒ
-    [SerializeField] private Texture grabbedTexture;   // ’Í‚Ü‚ê‚½‚Æ‚«‚ÌƒeƒNƒXƒ`ƒƒ
-    [SerializeField] private Texture dropTexture;      // —‰º’†‚ÌƒeƒNƒXƒ`ƒƒ
+    [SerializeField] private Texture waitingTexture;   // å¾…æ©Ÿä¸­ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
+    [SerializeField] private Texture grabbedTexture;   // æ´ã¾ã‚ŒãŸã¨ãã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
+    [SerializeField] private Texture dropTexture;      // è½ä¸‹ä¸­ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
 
     [Header("Sound Effects")]
-    [SerializeField] private AudioClip grabSE;         // ’Í‚Ü‚ê‚½‚Æ‚«‚ÌSE
-    [SerializeField] private AudioClip collisionSE;    // Õ“Ë‚ÌSE
-    [SerializeField] private AudioClip[] waitingSEs;   // ‘Ò‹@’†‚Ìƒ‰ƒ“ƒ_ƒ€SE
+    [SerializeField] private AudioClip grabSE;         // æ´ã¾ã‚ŒãŸã¨ãã®SE
+    [SerializeField] private AudioClip collisionSE;    // è¡çªæ™‚ã®SE
+    [SerializeField] private AudioClip[] waitingSEs;   // å¾…æ©Ÿä¸­ã®ãƒ©ãƒ³ãƒ€ãƒ SE
 
     [Header("Effects")]
-    [SerializeField] private GameObject grabEffectPrefab;          // ’Í‚Ü‚ê‚½‚Æ‚«‚ÌƒGƒtƒFƒNƒg
-    [SerializeField] private GameObject collisionImpactEffectPrefab; // ÕŒ‚FX
-    [SerializeField] private GameObject collisionConfusionEffectPrefab; // ¬—FX
-    [SerializeField] private GameObject waitingEffectPrefab;       // ‘Ò‹@’†‚ÌƒGƒtƒFƒNƒg
+    [SerializeField] private GameObject grabEffectPrefab;          // æ´ã¾ã‚ŒãŸã¨ãã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
+    [SerializeField] private GameObject collisionImpactEffectPrefab; // è¡æ’ƒFX
+    [SerializeField] private GameObject collisionConfusionEffectPrefab; // æ··ä¹±FX
+    [SerializeField] private GameObject waitingEffectPrefab;       // å¾…æ©Ÿä¸­ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 
     [Header("Waiting Sound Settings")]
-    [SerializeField] private float minWaitTime = 3f;   // ‘Ò‹@SEÄ¶‚ÌÅ¬ŠÔŠu
-    [SerializeField] private float maxWaitTime = 7f;   // ‘Ò‹@SEÄ¶‚ÌÅ‘åŠÔŠu
-    [SerializeField] private float waitingSEProbability = 0.5f; // SEÄ¶Šm—¦i0`1j
+    [SerializeField] private float minWaitTime = 3f;   // å¾…æ©ŸSEå†ç”Ÿã®æœ€å°é–“éš”
+    [SerializeField] private float maxWaitTime = 7f;   // å¾…æ©ŸSEå†ç”Ÿã®æœ€å¤§é–“éš”
+    [SerializeField] private float waitingSEProbability = 0.5f; // SEå†ç”Ÿç¢ºç‡ï¼ˆ0ã€œ1ï¼‰
 
-    private Material catMaterial;      // ”L‚Ìƒ}ƒeƒŠƒAƒ‹
-    private Animator animator;         // ”L‚ÌƒAƒjƒ[ƒVƒ‡ƒ“§Œä
-    private AudioSource audioSource;   // ‰¹ºÄ¶—p‚ÌAudioSource
+    private Material catMaterial;      // çŒ«ã®ãƒãƒ†ãƒªã‚¢ãƒ«
+    private Animator animator;         // çŒ«ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ¶å¾¡
+    private AudioSource audioSource;   // éŸ³å£°å†ç”Ÿç”¨ã®AudioSource
 
-    private bool isGrabbed = false;    // ’Í‚Ü‚ê‚½ó‘Ô‚©‚Ç‚¤‚©
-    private int grabCount = 0;         // ’Í‚Ü‚ê‚½‰ñ”
-    private GameObject waitingEffectInstance; // ‘Ò‹@ƒGƒtƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+    private bool isGrabbed = false;    // æ´ã¾ã‚ŒãŸçŠ¶æ…‹ã‹ã©ã†ã‹
+    private bool onCollision = false; // è¡çªçŠ¶æ…‹ã‹ã©ã†ã‹
+    private int grabCount = 0;         // æ´ã¾ã‚ŒãŸå›æ•°
+    private GameObject waitingEffectInstance; // å¾…æ©Ÿã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+    private bool collisionHandled = false;   // è¡çªå‡¦ç†æ¸ˆã¿ãƒ•ãƒ©ã‚°
 
-    // œŠO‚·‚éƒ^ƒOƒŠƒXƒg
+    private Coroutine textureResetCoroutine = null; // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚»ãƒƒãƒˆå‡¦ç†ã‚’ç®¡ç†
+
+    // é™¤å¤–ã™ã‚‹ã‚¿ã‚°ãƒªã‚¹ãƒˆ
     private readonly string[] ignoredTags = { "Cup", "Bot_Collider" };
 
     private void Awake()
     {
-        // ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+        // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        // ”Lƒ‚ƒfƒ‹‚Ìƒ}ƒeƒŠƒAƒ‹‚ğæ“¾
+        // çŒ«ãƒ¢ãƒ‡ãƒ«ã®ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’å–å¾—
         SkinnedMeshRenderer smr = GetComponentInChildren<SkinnedMeshRenderer>();
         if (smr != null)
         {
@@ -49,30 +53,31 @@ public class CatAppearanceController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("SkinnedMeshRenderer‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B");
+            Debug.LogWarning("SkinnedMeshRendererãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚");
         }
 
-        // ‰Šúó‘Ô‚ğXV
+        // åˆæœŸçŠ¶æ…‹ã‚’æ›´æ–°
         UpdateTexture();
-        StartCoroutine(PlayRandomWaitingSE()); // ƒ‰ƒ“ƒ_ƒ€‚È‘Ò‹@SEÄ¶‚ğŠJn
-        SpawnWaitingEffect();                 // ‘Ò‹@ƒGƒtƒFƒNƒg‚ğ¶¬
+        StartCoroutine(PlayRandomWaitingSE()); // ãƒ©ãƒ³ãƒ€ãƒ ãªå¾…æ©ŸSEå†ç”Ÿã‚’é–‹å§‹
+        SpawnWaitingEffect();                 // å¾…æ©Ÿã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
     }
 
-    // ’Í‚Ü‚ê‚½‚Æ‚«‚Ìˆ—
+    // æ´ã¾ã‚ŒãŸã¨ãã®å‡¦ç†
     public void OnSelect()
     {
-        isGrabbed = true;    // ’Í‚Ü‚ê‚½ó‘Ô‚É•ÏX
-        grabCount++;         // ’Í‚Ü‚ê‚½‰ñ”‚ğ‘‰Á
-        UpdateTexture();     // ƒeƒNƒXƒ`ƒƒ‚ğXV
+        isGrabbed = true;    // æ´ã¾ã‚ŒãŸçŠ¶æ…‹ã«å¤‰æ›´
+        grabCount++;         // æ´ã¾ã‚ŒãŸå›æ•°ã‚’å¢—åŠ 
+        UpdateTexture();     // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å³æ™‚æ›´æ–°
+        CancelTextureReset(); // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚»ãƒƒãƒˆå‡¦ç†ã‚’åœæ­¢
 
-        // ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ•ÏX
+        // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å¤‰æ›´
         animator.SetBool("IsGrabbed", true);
 
-        // ’Í‚Ü‚ê‚½‚Æ‚«‚ÌSE‚ÆƒGƒtƒFƒNƒg‚ğÄ¶
+        // æ´ã¾ã‚ŒãŸã¨ãã®SEã¨ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å†ç”Ÿ
         PlaySound(grabSE);
         SpawnEffect(grabEffectPrefab);
 
-        // ‘Ò‹@ƒGƒtƒFƒNƒg‚ğíœ
+        // å¾…æ©Ÿã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å‰Šé™¤
         if (waitingEffectInstance != null)
         {
             Destroy(waitingEffectInstance);
@@ -80,20 +85,23 @@ public class CatAppearanceController : MonoBehaviour
         }
     }
 
-    // ’Í‚Ü‚ê‚½ó‘Ô‚ª‰ğœ‚³‚ê‚½‚Æ‚«‚Ìˆ—
+    // æ´ã¾ã‚ŒãŸçŠ¶æ…‹ãŒè§£é™¤ã•ã‚ŒãŸã¨ãã®å‡¦ç†
     public void OnUnselect()
     {
-        isGrabbed = false; // ’Í‚Ü‚ê‚Ä‚¢‚È‚¢ó‘Ô‚É•ÏX
-        UpdateTexture();   // ƒeƒNƒXƒ`ƒƒ‚ğXV
+        isGrabbed = false; // æ´ã¾ã‚Œã¦ã„ãªã„çŠ¶æ…‹ã«å¤‰æ›´
+        UpdateTexture();   // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å³æ™‚æ›´æ–°
+        CancelTextureReset(); // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚»ãƒƒãƒˆå‡¦ç†ã‚’åœæ­¢
 
-        // ƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒŠƒZƒbƒg
+        // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ãƒªã‚»ãƒƒãƒˆ
         animator.SetBool("IsGrabbed", false);
     }
 
-    // Õ“Ë‚Ìˆ—
     private void OnCollisionEnter(Collision collision)
     {
-        // œŠO‚·‚éƒ^ƒO‚Å‚ ‚ê‚Îˆ—‚ğ’†’f
+        // è¡çªæ¸ˆã¿ãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ã‚‹å ´åˆã¯ç„¡è¦–
+        if (collisionHandled) return;
+
+        // é™¤å¤–ã™ã‚‹ã‚¿ã‚°ã§ã‚ã‚Œã°å‡¦ç†ã‚’ä¸­æ–­
         foreach (string tag in ignoredTags)
         {
             if (collision.gameObject.CompareTag(tag))
@@ -102,50 +110,104 @@ public class CatAppearanceController : MonoBehaviour
             }
         }
 
-        // ’Í‚Ü‚ê‚Ä‚¢‚È‚¢A‚©‚Â’Í‚Ü‚ê‚½‰ñ”‚ª1ˆÈã‚Ìê‡‚Ì‚İˆ—
+        // æ´ã¾ã‚Œã¦ã„ãªã„ã€ã‹ã¤æ´ã¾ã‚ŒãŸå›æ•°ãŒ1ä»¥ä¸Šã®å ´åˆã®ã¿å‡¦ç†
         if (!isGrabbed && grabCount > 0)
         {
-            // Õ“Ë‚ÌFX‚ÆSE‚ğ”­¶
-            SpawnEffect(collisionConfusionEffectPrefab, transform, true); // ¬—FX
-            SpawnEffect(collisionImpactEffectPrefab, collision.contacts[0].point, Vector3.up); // ÕŒ‚FXi‚’¼•ûŒüj
+            onCollision = true; // è¡çªçŠ¶æ…‹ã«è¨­å®š
+            UpdateTexture(); // DropTextureã‚’å³æ™‚åæ˜ 
+            StartTextureReset(); // 70ãƒ•ãƒ¬ãƒ¼ãƒ å¾Œã®ãƒªã‚»ãƒƒãƒˆå‡¦ç†ã‚’é–‹å§‹
+
+            // è¡çªæ™‚ã®FXã¨SEã‚’ç™ºç”Ÿ
+            SpawnEffect(collisionConfusionEffectPrefab, transform, true); // æ··ä¹±FX
+            SpawnEffect(collisionImpactEffectPrefab, collision.contacts[0].point, Vector3.up); // è¡æ’ƒFXï¼ˆå‚ç›´æ–¹å‘ï¼‰
             PlaySound(collisionSE);
+
+            // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã§è¡çªçŠ¶æ…‹ã‚’é€šçŸ¥
+            animator.SetBool("OnCollision", true);
+
+            // è¡çªãƒ•ãƒ©ã‚°ã‚’ã‚ªãƒ³ã«ã—ã€0.5ç§’å¾Œã«è§£é™¤
+            collisionHandled = true;
+            StartCoroutine(ResetCollisionFlag());
         }
     }
 
-    // Œ»İ‚Ìó‘Ô‚É‰‚¶‚ÄƒeƒNƒXƒ`ƒƒ‚ğXV
+    // è¡çªãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³ï¼ˆ0.5ç§’å¾Œï¼‰
+    private IEnumerator ResetCollisionFlag()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        // è¡çªçŠ¶æ…‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ•ãƒ©ã‚°ã‚’è§£é™¤
+        collisionHandled = false; // è¡çªå‡¦ç†ãƒ•ãƒ©ã‚°ã‚’è§£é™¤
+        animator.SetBool("OnCollision", false);
+    }
+
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’70ãƒ•ãƒ¬ãƒ¼ãƒ å¾Œã«ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³
+    private IEnumerator ResetTextureAfter70Frames()
+    {
+        yield return new WaitForSeconds(70f / 60f); // ç´„1.16ç§’å¾Œ
+
+        onCollision = false; // è¡çªçŠ¶æ…‹ã‚’è§£é™¤
+        UpdateTexture();      // WaitingTextureã‚’åæ˜ 
+    }
+
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚»ãƒƒãƒˆå‡¦ç†ã‚’é–‹å§‹
+    private void StartTextureReset()
+    {
+        CancelTextureReset(); // æ—¢å­˜ã®ãƒªã‚»ãƒƒãƒˆå‡¦ç†ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«
+        textureResetCoroutine = StartCoroutine(ResetTextureAfter70Frames());
+    }
+
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚»ãƒƒãƒˆå‡¦ç†ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«
+    private void CancelTextureReset()
+    {
+        if (textureResetCoroutine != null)
+        {
+            StopCoroutine(textureResetCoroutine);
+            textureResetCoroutine = null;
+        }
+    }
+
+    // ç¾åœ¨ã®çŠ¶æ…‹ã«å¿œã˜ã¦ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’æ›´æ–°
     private void UpdateTexture()
     {
         if (catMaterial == null) return;
 
-        if (isGrabbed)
+        if (onCollision)
         {
+            // è¡çªä¸­ã¯DropTextureã‚’è¡¨ç¤º
+            catMaterial.mainTexture = dropTexture;
+        }
+        else if (isGrabbed)
+        {
+            // æ´ã¾ã‚Œã¦ã„ã‚‹å ´åˆã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
             catMaterial.mainTexture = grabbedTexture;
         }
         else
         {
+            // å¾…æ©Ÿä¸­ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
             catMaterial.mainTexture = waitingTexture;
         }
     }
 
-    // AudioClip‚ğÄ¶
+    // AudioClipã‚’å†ç”Ÿ
     private void PlaySound(AudioClip clip)
     {
         if (audioSource != null && clip != null)
         {
-            audioSource.PlayOneShot(clip); // ˆê“x‚¾‚¯Ä¶
+            audioSource.PlayOneShot(clip); // ä¸€åº¦ã ã‘å†ç”Ÿ
         }
     }
 
-    // ƒ‰ƒ“ƒ_ƒ€‚É‘Ò‹@SE‚ğÄ¶‚·‚éƒRƒ‹[ƒ`ƒ“
+    // ãƒ©ãƒ³ãƒ€ãƒ ã«å¾…æ©ŸSEã‚’å†ç”Ÿã™ã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³
     private IEnumerator PlayRandomWaitingSE()
     {
         while (true)
         {
-            // ƒ‰ƒ“ƒ_ƒ€‚ÈŠÔ‚ğ‘Ò‹@
+            // ãƒ©ãƒ³ãƒ€ãƒ ãªæ™‚é–“ã‚’å¾…æ©Ÿ
             float waitTime = Random.Range(minWaitTime, maxWaitTime);
             yield return new WaitForSeconds(waitTime);
 
-            // Šm—¦‚ÉŠî‚Ã‚¢‚ÄSE‚ğÄ¶
+            // ç¢ºç‡ã«åŸºã¥ã„ã¦SEã‚’å†ç”Ÿ
             if (Random.value < waitingSEProbability && waitingSEs.Length > 0)
             {
                 AudioClip clip = waitingSEs[Random.Range(0, waitingSEs.Length)];
@@ -154,7 +216,7 @@ public class CatAppearanceController : MonoBehaviour
         }
     }
 
-    // w’è‚µ‚½ƒGƒtƒFƒNƒg‚ğ¶¬iƒIƒvƒVƒ‡ƒ“‚Åe‚Ì‰ñ“]‚É]‚¤j
+    // æŒ‡å®šã—ãŸã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆï¼ˆã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§è¦ªã®å›è»¢ã«å¾“ã†ï¼‰
     private void SpawnEffect(GameObject effectPrefab, Transform parent = null, bool attachToParent = false)
     {
         if (effectPrefab != null)
@@ -164,22 +226,22 @@ public class CatAppearanceController : MonoBehaviour
             {
                 effect.transform.SetParent(parent);
             }
-            Destroy(effect, 5f); // Ä¶Œã‚Éíœ
+            Destroy(effect, 5f); // å†ç”Ÿå¾Œã«å‰Šé™¤
         }
     }
 
-    // ÕŒ‚FX‚ğ‚’¼•ûŒü‚É¶¬
+    // è¡æ’ƒFXã‚’å‚ç›´æ–¹å‘ã«ç”Ÿæˆ
     private void SpawnEffect(GameObject effectPrefab, Vector3 position, Vector3 normal)
     {
         if (effectPrefab != null)
         {
-            Quaternion rotation = Quaternion.identity; // ‰ñ“]‚ğ‚’¼•ûŒü‚ÉŒÅ’è
+            Quaternion rotation = Quaternion.identity; // å›è»¢ã‚’å‚ç›´æ–¹å‘ã«å›ºå®š
             GameObject effect = Instantiate(effectPrefab, position, rotation);
-            Destroy(effect, 5f); // Ä¶Œã‚Éíœ
+            Destroy(effect, 5f); // å†ç”Ÿå¾Œã«å‰Šé™¤
         }
     }
 
-    // ‘Ò‹@ƒGƒtƒFƒNƒg‚ğ¶¬
+    // å¾…æ©Ÿã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
     private void SpawnWaitingEffect()
     {
         if (waitingEffectPrefab != null)

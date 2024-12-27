@@ -2811,16 +2811,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8824960365005893407}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.4434623, z: 0, w: 0.89629304}
-  m_LocalPosition: {x: -0.1683, y: 0.9007, z: 0.201}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.9, z: 0}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6083063607792661100}
   - {fileID: 4611800140971553274}
   - {fileID: 4809055835733873170}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 52.65, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &3002756141737215984
 Animator:
   serializedVersion: 5
@@ -3068,7 +3068,8 @@ MonoBehaviour:
   dropTexture: {fileID: 2800000, guid: 29edcb0b4ce5dcf46a24506fb4a0f516, type: 3}
   grabSE: {fileID: 8300000, guid: 4d31fb8cfceeee14692f4b10657b1ddf, type: 3}
   collisionSE: {fileID: 8300000, guid: 4f62b142cba98544d90e41fbea91cd07, type: 3}
-  waitingSEs: []
+  waitingSEs:
+  - {fileID: 8300000, guid: bbd81f318d00e0f419545d222540a54a, type: 3}
   grabEffectPrefab: {fileID: 0}
   collisionImpactEffectPrefab: {fileID: 8073478381020825891, guid: dcb3923b8cad3f445bd6e09a7039a266, type: 3}
   collisionConfusionEffectPrefab: {fileID: 7742333989996367436, guid: ef1f7a7352274e14cab47d7f415b09c6, type: 3}
