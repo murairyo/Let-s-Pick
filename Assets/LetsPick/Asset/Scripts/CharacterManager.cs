@@ -25,6 +25,15 @@ public class RespawnObject : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        // 衝突したオブジェクトのタグが "Floor" の場合にリスポーン処理を実行
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            Respawn();
+        }
+    }
+
     void Respawn()
     {
         // 初期位置に物体を移動し、速度をリセット

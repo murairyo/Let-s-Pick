@@ -16,6 +16,7 @@ TagManager:
   - QDSUIIcon
   - QDSUITextSecondaryColor
   - Cup_SideCollider
+  - Floor
   layers:
   - Default
   - TransparentFX

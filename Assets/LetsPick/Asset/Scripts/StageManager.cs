@@ -5,8 +5,11 @@ public class StageManager : MonoBehaviour
     [SerializeField] private GameObject[] stages; // 全ステージを登録
     [SerializeField] private GameObject stageClearUI; // ネクストボタンUI
     [SerializeField] private GameObject exitButtonUI; // ExitボタンUI
-    private int currentStageIndex = 0; // 現在のステージインデックス
+    [SerializeField] private GameObject finishUI; // Finish UI
+    [SerializeField] private AudioSource clearSound; // ステージクリア時の音
+    [SerializeField] private ParticleSystem clearEffect; // ステージクリア時のエフェクト
 
+    private int currentStageIndex = 0; // 現在のステージインデックス
     private int totalCups; // ステージ内のカップの総数
     private int filledCups; // 埋まったカップの数
 
@@ -30,17 +33,14 @@ public class StageManager : MonoBehaviour
             return;
         }
 
-        // 現在のステージを取得
         GameObject currentStage = stages[currentStageIndex];
         filledCups = 0;
 
-        // タグでカップを取得
         GameObject[] cups = GameObject.FindGameObjectsWithTag("Bot_Collider");
         totalCups = cups.Length;
 
         foreach (var cup in cups)
         {
-            // 各カップの挙動を確認し、イベントを登録
             var colliderHandler = cup.GetComponent<ColliderHandler>();
             if (colliderHandler != null)
             {
@@ -64,11 +64,9 @@ public class StageManager : MonoBehaviour
     /// </summary>
     public void ActivateNextStage()
     {
-        // 現在のステージを非アクティブ化
         GameObject currentStage = stages[currentStageIndex];
         currentStage.SetActive(false);
 
-        // カップのリスナー解除
         ColliderHandler[] cups = currentStage.GetComponentsInChildren<ColliderHandler>();
         foreach (var cup in cups)
         {
@@ -76,27 +74,23 @@ public class StageManager : MonoBehaviour
             Debug.Log($"{cup.name}: ColliderHandler event unregistered.");
         }
 
-        // 最後のステージの場合、Exitボタンを表示
         if (currentStageIndex == stages.Length - 1)
         {
             Debug.Log("最後のステージをクリアしました！");
             ShowExitButton();
-            return; // 次のステージに進まない
+            return;
         }
 
-        // 次のステージに進む
         currentStageIndex++;
         Debug.Log($"Current Stage Index: {currentStageIndex}, Total Stages: {stages.Length}");
 
         if (currentStageIndex < stages.Length)
         {
             GameObject nextStage = stages[currentStageIndex];
-            nextStage.SetActive(true); // 次のステージをアクティブ化
+            nextStage.SetActive(true);
             InitializeCurrentStage();
         }
     }
-
-
 
     /// <summary>
     /// カップが埋まるたびに呼び出される
@@ -106,7 +100,6 @@ public class StageManager : MonoBehaviour
         filledCups++;
         Debug.Log($"カップが埋まりました: {filledCups}/{totalCups}");
 
-        // すべてのカップが埋まった場合、ステージクリア
         if (filledCups >= totalCups)
         {
             TriggerStageClear();
@@ -120,23 +113,43 @@ public class StageManager : MonoBehaviour
     {
         Debug.Log($"ステージ{currentStageIndex + 1}クリア！");
 
-        // 最終ステージの場合、Exitボタンを表示
+        // Finish UI の表示
+        if (finishUI != null)
+        {
+            finishUI.SetActive(true);
+            Debug.Log("Finish UI is now visible.");
+        }
+
+        // 終了の合図の音を再生
+        if (clearSound != null)
+        {
+            clearSound.Play();
+            Debug.Log("Clear sound played.");
+        }
+
+        // エフェクトを発動
+        if (clearEffect != null)
+        {
+            clearEffect.Play();
+            Debug.Log("Clear effect played.");
+        }
+
+        // 最終ステージの場合、Exitボタンを表示して終了
         if (currentStageIndex == stages.Length - 1)
         {
             Debug.Log("最終ステージをクリアしました！");
             ShowExitButton();
-            return; // 次のステージに進まない
+            return;
         }
 
         // 通常のステージクリア処理
         if (stageClearUI != null && currentStageIndex < stages.Length - 1)
         {
-            stageClearUI.transform.localScale = Vector3.one; // スケールをリセット
-            stageClearUI.SetActive(true); // ネクストボタンを表示
+            stageClearUI.transform.localScale = Vector3.one;
+            stageClearUI.SetActive(true);
             Debug.Log("StageClearUI is now visible with scale reset to 1.");
         }
     }
-
 
     /// <summary>
     /// Exitボタンを表示する
@@ -145,8 +158,8 @@ public class StageManager : MonoBehaviour
     {
         if (exitButtonUI != null)
         {
-            exitButtonUI.transform.localScale = Vector3.one; // スケールをリセット
-            exitButtonUI.SetActive(true); // Exitボタンを表示
+            exitButtonUI.transform.localScale = Vector3.one;
+            exitButtonUI.SetActive(true);
             Debug.Log("ExitButtonUI is now visible with scale reset to 1.");
         }
     }
