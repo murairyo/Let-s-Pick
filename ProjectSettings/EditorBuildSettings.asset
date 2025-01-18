@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/LetsPick/NormalMode.unity
-    guid: 392cd8f11e9f1cd4c9c2347d0e75862d
-  - enabled: 1
     path: Assets/LetsPick/ModeSelect.unity
     guid: da0120e3b9f36e448a598d835c8bd45b
+  - enabled: 1
+    path: Assets/LetsPick/NormalMode.unity
+    guid: 392cd8f11e9f1cd4c9c2347d0e75862d
   - enabled: 1
     path: Assets/LetsPick/KidsMode.unity
     guid: 32fa37b696a98de459fe9677f7552b98
