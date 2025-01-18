@@ -3,7 +3,7 @@ using UnityEngine;
 public class StageManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] stages; // 全ステージを登録
-    [SerializeField] private GameObject stageClearUI; // ネクストボタンUI
+    [SerializeField] private GameObject nextStageUI; // ネクストボタンUI
     [SerializeField] private GameObject exitButtonUI; // ExitボタンUI
     [SerializeField] private GameObject finishUI; // Finish UI
     [SerializeField] private AudioSource clearSound; // ステージクリア時の音
@@ -143,10 +143,10 @@ public class StageManager : MonoBehaviour
         }
 
         // 通常のステージクリア処理
-        if (stageClearUI != null && currentStageIndex < stages.Length - 1)
+        if (nextStageUI != null && currentStageIndex < stages.Length - 1)
         {
-            stageClearUI.transform.localScale = Vector3.one;
-            stageClearUI.SetActive(true);
+            nextStageUI.transform.localScale = Vector3.one;
+            nextStageUI.SetActive(true);
             Debug.Log("StageClearUI is now visible with scale reset to 1.");
         }
     }
