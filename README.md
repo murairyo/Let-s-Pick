@@ -1,3 +1,3 @@
 # Let-s-Pick
 
-dev/FX$SE>dev/stage02>dev/staage03
+Unityのバージョンは2022.3.27f1
