@@ -511,13 +511,13 @@ MonoBehaviour:
   CatInCup: {fileID: 5117442069464105296}
   cupInMaterial: {fileID: 2100000, guid: 32351a717b38fd04587d1f1a5d060c65, type: 2}
   fxPrefabs:
-  - {fileID: 6868911387248766279, guid: 512b2910e2bc75143ac373176f1ddad6, type: 3}
   - {fileID: 6036342265372849674, guid: bed9a6684e0651149b11bb7efc4a9cbb, type: 3}
+  - {fileID: 6868911387248766279, guid: 512b2910e2bc75143ac373176f1ddad6, type: 3}
   seAudioSources:
   - {fileID: 3624452150632261178}
   - {fileID: 6682908812314403850}
   incorrectFxPrefab: {fileID: 0}
-  incorrectSe: {fileID: 4952210640684226054}
+  incorrectSe: {fileID: 0}
 --- !u!82 &3624452150632261178
 AudioSource:
   m_ObjectHideFlags: 0

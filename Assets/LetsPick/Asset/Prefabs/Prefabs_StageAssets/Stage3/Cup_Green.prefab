@@ -2359,8 +2359,8 @@ MonoBehaviour:
   - {fileID: 6868911387248766279, guid: 512b2910e2bc75143ac373176f1ddad6, type: 3}
   - {fileID: 6036342265372849674, guid: bed9a6684e0651149b11bb7efc4a9cbb, type: 3}
   seAudioSources:
-  - {fileID: 8226781399943098159}
   - {fileID: 5619040101182289308}
+  - {fileID: 8226781399943098159}
   incorrectFxPrefab: {fileID: 0}
   incorrectSe: {fileID: 2854589616705870569}
 --- !u!82 &2854589616705870569
